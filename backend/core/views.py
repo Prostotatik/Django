@@ -53,7 +53,9 @@ class VerifyCodeView(APIView):
         if not sms_code:
             return Response({"error": "Invalid code"}, status=status.HTTP_400_BAD_REQUEST)
 
-        if sms_code.created_at < timezone.now() - timedelta(minutes=5):
+        # Ensure created_at is timezone-aware for comparison
+        created_at = timezone.make_aware(sms_code.created_at, timezone.get_current_timezone())
+        if created_at < timezone.now() - timedelta(minutes=5):
             return Response({"error": "Code expired"}, status=status.HTTP_400_BAD_REQUEST)
 
         user, created = User.objects.get_or_create(phone=phone, defaults={'name': 'New User', 'role': 'client'})
