@@ -1,5 +1,6 @@
 from django.db import models
 from phonenumber_field.modelfields import PhoneNumberField
+from django.contrib.auth.hashers import make_password, check_password
 
 class User(models.Model):
     name = models.CharField(max_length=255)
@@ -12,6 +13,11 @@ class User(models.Model):
     region = models.CharField(max_length=100, null=True, blank=True)
     quantity_order = models.DecimalField(max_digits=10, decimal_places=2, default=0)
     rating = models.IntegerField(default=0)
+    def set_password(self, raw_password):
+        self.password = make_password(raw_password)
+
+    def check_password(self, raw_password):
+        return check_password(raw_password, self.password)
 
     class Meta:
         db_table = 'users'  # Explicitly map to the existing 'users' table

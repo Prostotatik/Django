@@ -73,6 +73,7 @@ CREATE TABLE sms_codes (
 );
 
 -- Insert Initial Data
+-- Insert Initial Data Only
 INSERT INTO categories (name) VALUES ('Cleaning'), ('Plumbing'), ('Electrical');
 INSERT INTO users (name, email, phone, address, role, password, region, quantity_order, rating)
 VALUES ('John Doe', 'john@example.com', '+1234567890', '123 Main St', 'client', 'hashed_password', 'NY', 0, 0),
