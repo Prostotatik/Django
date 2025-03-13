@@ -2,7 +2,10 @@ version: '3.8'
 
 services:
   db:
-    image: postgres:15
+    image: craftonx/profi-postgres:15
+    build:
+      context: ./backend
+      dockerfile: Dockerfile.postgres
     environment:
       POSTGRES_DB: profi_db
       POSTGRES_USER: profi_user
@@ -19,6 +22,7 @@ services:
       retries: 5
 
   app:
+    image: craftonx/profi-django:1.1
     build:
       context: ./backend
       dockerfile: Dockerfile
@@ -39,5 +43,22 @@ services:
       db:
         condition: service_healthy
 
+  frontend:
+    image: craftonx/profi-react:1.1
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=development
+    depends_on:
+      - app
+    command: npm start
+
 volumes:
   postgres_data:
+
