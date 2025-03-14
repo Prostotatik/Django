@@ -24,7 +24,7 @@ SECRET_KEY = 'your-secret-key-here'  # Replace with a secure random key in produ
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True  # Set to True for development; set to False for production
 
-ALLOWED_HOSTS = ['localhost', '127.0.0.1']  # Add more hosts if needed (e.g., VM IP)
+ALLOWED_HOSTS = ['192.168.1.100', 'localhost', '127.0.0.1']  # Add more hosts if needed (e.g., VM IP)
 
 # Application definition
 INSTALLED_APPS = [
@@ -69,6 +69,11 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'django_project.wsgi.application'
 
+# HTTPS settings (optional for testing, enable later for production)
+SECURE_SSL_REDIRECT = False
+SESSION_COOKIE_SECURE = False
+CSRF_COOKIE_SECURE = False
+
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 DATABASES = {
@@ -109,6 +114,11 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 STATIC_URL = 'static/'
+STATIC_ROOT = '/home/vagrant/backend/static'  # Absolute path for collected static files
+
+# Media files
+MEDIA_URL = '/media/'
+MEDIA_ROOT = '/home/vagrant/backend/media'    # Absolute path for media files
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field

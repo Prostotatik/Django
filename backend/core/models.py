@@ -14,16 +14,17 @@ class User(models.Model):
     rating = models.IntegerField(default=0)
 
     class Meta:
-        db_table = 'users'  # Explicitly map to the existing 'users' table
+        db_table = 'users'
 
     def __str__(self):
         return self.name
 
-# Define other models (Category, Service, etc.) with their respective db_table settings
 class Category(models.Model):
     name = models.CharField(max_length=255)
+
     class Meta:
         db_table = 'categories'
+
     def __str__(self):
         return self.name
 
@@ -32,8 +33,10 @@ class Service(models.Model):
     description = models.TextField()
     category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name='services')
     price = models.DecimalField(max_digits=10, decimal_places=2)
+
     class Meta:
         db_table = 'services'
+
     def __str__(self):
         return self.name
 
@@ -46,8 +49,10 @@ class Order(models.Model):
     amount = models.DecimalField(max_digits=10, decimal_places=2)
     price = models.DecimalField(max_digits=10, decimal_places=2)
     status = models.CharField(max_length=50, choices=[('pending', 'Pending'), ('completed', 'Completed'), ('cancelled', 'Cancelled')])
+
     class Meta:
         db_table = 'orders'
+
     def __str__(self):
         return f"Order {self.id} for {self.service.name}"
 
@@ -60,8 +65,10 @@ class Payment(models.Model):
     amount = models.DecimalField(max_digits=10, decimal_places=2)
     price = models.DecimalField(max_digits=10, decimal_places=2)
     status = models.CharField(max_length=50, choices=[('pending', 'Pending'), ('completed', 'Completed'), ('cancelled', 'Cancelled')])
+
     class Meta:
         db_table = 'payments'
+
     def __str__(self):
         return f"Payment {self.id} for Order {self.order.id}"
 
@@ -69,7 +76,9 @@ class SMSCode(models.Model):
     phone = PhoneNumberField()
     code = models.CharField(max_length=6)
     created_at = models.DateTimeField(auto_now_add=True)
+
     class Meta:
         db_table = 'sms_codes'
+
     def __str__(self):
         return f"Code {self.code} for {self.phone}"
