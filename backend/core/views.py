@@ -1,5 +1,4 @@
 from django.shortcuts import render
-
 from rest_framework import viewsets
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -7,8 +6,8 @@ from rest_framework import status
 import random
 from django.utils import timezone
 from datetime import timedelta
-from .models import User, Category, Service, Order, Payment, SMSCode
-from .serializers import UserSerializer, CategorySerializer, ServiceSerializer, OrderSerializer, PaymentSerializer
+from .models import User, Category, SubCategory, Service, Order, Payment, SMSCode
+from .serializers import UserSerializer, CategorySerializer, SubCategorySerializer, ServiceSerializer, OrderSerializer, PaymentSerializer
 
 class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
@@ -17,6 +16,10 @@ class UserViewSet(viewsets.ModelViewSet):
 class CategoryViewSet(viewsets.ModelViewSet):
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
+
+class SubCategoryViewSet(viewsets.ModelViewSet):
+    queryset = SubCategory.objects.all()
+    serializer_class = SubCategorySerializer
 
 class ServiceViewSet(viewsets.ModelViewSet):
     queryset = Service.objects.all()

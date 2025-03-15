@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.contrib.admin import SimpleListFilter
-from .models import User, Category, Service, Order, Payment, SMSCode
+from .models import User, Category, SubCategory, Service, Order, Payment, SMSCode
 
 # Custom filter for User by phone number
 class PhoneFilter(SimpleListFilter):
@@ -64,6 +64,13 @@ class CategoryAdmin(admin.ModelAdmin):
     def delete_selected_categories(self, request, queryset):
         queryset.delete()
         self.message_user(request, f"Deleted {queryset.count()} categories.")
+
+# Custom admin for SubCategory
+@admin.register(SubCategory)
+class SubCategoryAdmin(admin.ModelAdmin):
+    list_display = ('id', 'name', 'category')
+    list_filter = ('category',)
+    search_fields = ('name',)
 
 # Custom admin for Service
 @admin.register(Service)

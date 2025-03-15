@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import User, Category, Service, Order, Payment
+from .models import User, Category, SubCategory, Service, Order, Payment
 
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
@@ -11,7 +11,14 @@ class CategorySerializer(serializers.ModelSerializer):
         model = Category
         fields = '__all__'
 
+class SubCategorySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = SubCategory
+        fields = '__all__'
+
 class ServiceSerializer(serializers.ModelSerializer):
+    sub_categories = serializers.PrimaryKeyRelatedField(many=True, queryset=SubCategory.objects.all())
+
     class Meta:
         model = Service
         fields = '__all__'

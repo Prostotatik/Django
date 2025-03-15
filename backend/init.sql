@@ -20,6 +20,14 @@ CREATE TABLE categories (
     name VARCHAR(255) NOT NULL
 );
 
+-- Create SubCategories Table
+CREATE TABLE sub_categories (
+    id SERIAL PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    category_id INTEGER NOT NULL,
+    FOREIGN KEY (category_id) REFERENCES categories(id) ON DELETE CASCADE
+);
+
 -- Create Services Table
 CREATE TABLE services (
     id SERIAL PRIMARY KEY,
@@ -28,6 +36,16 @@ CREATE TABLE services (
     category_id INTEGER NOT NULL,
     price DECIMAL(10, 2) NOT NULL,
     FOREIGN KEY (category_id) REFERENCES categories(id) ON DELETE CASCADE
+);
+
+-- Create ServiceSubCategories Table (Junction table for many-to-many relationship)
+CREATE TABLE service_sub_categories (
+    id SERIAL PRIMARY KEY,
+    service_id INTEGER NOT NULL,
+    sub_category_id INTEGER NOT NULL,
+    FOREIGN KEY (service_id) REFERENCES services(id) ON DELETE CASCADE,
+    FOREIGN KEY (sub_category_id) REFERENCES sub_categories(id) ON DELETE CASCADE,
+    UNIQUE (service_id, sub_category_id)
 );
 
 -- Create Orders Table
@@ -74,9 +92,20 @@ CREATE TABLE sms_codes (
 
 -- Insert Initial Data
 INSERT INTO categories (name) VALUES ('Cleaning'), ('Plumbing'), ('Electrical');
-INSERT INTO users (name, email, phone, address, role, password, region, quantity_order, rating)
-VALUES ('John Doe', 'john@example.com', '+1234567890', '123 Main St', 'client', 'hashed_password', 'NY', 0, 0),
-       ('Jane Smith', 'jane@example.com', '+1234567891', '456 Oak St', 'executor', 'hashed_password', 'CA', 0, 0);
+INSERT INTO sub_categories (name, category_id) VALUES
+    ('House Cleaning', 1),
+    ('Office Cleaning', 1),
+    ('Pipe Repair', 2);
+INSERT INTO users (name, email, phone, address, role, password, region, quantity_order, rating, created_at)
+VALUES
+    ('John Doe', 'john@example.com', '+1234567890', '123 Main St', 'client', 'hashed_password', 'NY', 0, 0, CURRENT_TIMESTAMP),
+    ('Jane Smith', 'jane@example.com', '+1234567891', '456 Oak St', 'executor', 'hashed_password', 'CA', 0, 0, CURRENT_TIMESTAMP);
 INSERT INTO services (name, description, category_id, price)
-VALUES ('House Cleaning', 'Full house cleaning service', 1, 50.00),
-       ('Pipe Repair', 'Fixing leaking pipes', 2, 75.00);
+VALUES
+    ('Cleaning Service', 'General cleaning', 1, 50.00),
+    ('Plumbing Service', 'Fixing pipes', 2, 75.00);
+INSERT INTO service_sub_categories (service_id, sub_category_id)
+VALUES
+    (1, 1),
+    (1, 2),
+    (2, 3);
